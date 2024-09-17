@@ -11,6 +11,7 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => 
   const [value, setValue] = useState(options[0])
   const [focusedIndex, setFocusedIndex] = useState(0)
   const optionRefs = useRef<(HTMLDivElement | null)[]>([])
+  const selectRef = useRef<HTMLDivElement>(null)
 
   const handleSelect = (option: string) => {
     setValue(option)
@@ -34,6 +35,25 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => 
     }
   }
 
+  // Close dropdown when clicking outside of the component
+  const handleClickOutside = (e: MouseEvent) => {
+    if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
+      setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isOpen])
+
   useEffect(() => {
     if (isOpen && optionRefs.current[focusedIndex]) {
       optionRefs.current[focusedIndex]?.focus()
@@ -41,7 +61,7 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => 
   }, [focusedIndex, isOpen])
 
   return (
-    <div className="relative">
+    <div ref={selectRef} className="relative">
       <div
         className={`px-4 py-2 max-w-96 border border-gray-400 rounded cursor-pointer ${classNames || ''}`}
         onClick={() => setIsOpen(!isOpen)}
