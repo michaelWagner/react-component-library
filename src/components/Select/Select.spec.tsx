@@ -3,30 +3,68 @@ import { Select } from './Select'
 
 describe('Select Component', () => {
   test('renders with default props', () => {
-    render(<Select options={['Option 1', 'Option 2']} value="Option 1" onChange={jest.fn()} />)
-    const selectElement = screen.getByRole('combobox')
-    expect(selectElement).toBeInTheDocument()
-    expect(selectElement).toHaveValue('Option 1')
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} />)
+    expect(screen.getByRole('combobox')).toBeInTheDocument()
+    expect(screen.getByText('Option 1')).toBeInTheDocument()
   })
 
-  test('handles onChange event', () => {
-    const handleChange = jest.fn()
-    render(<Select options={['Option 1', 'Option 2']} value="Option 1" onChange={handleChange} />)
-    const selectElement = screen.getByRole('combobox')
-    fireEvent.change(selectElement, { target: { value: 'Option 2' } })
-    expect(handleChange).toHaveBeenCalledTimes(1)
+  test('opens and closes dropdown on click', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} />)
+    const selectButton = screen.getByRole('combobox')
+    fireEvent.click(selectButton)
+    expect(screen.getByRole('listbox')).toBeInTheDocument()
+    fireEvent.click(selectButton)
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
   })
 
-  test('renders with custom styles', () => {
-    render(
+  test('selects an option', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} />)
+    const selectButton = screen.getByRole('combobox')
+    fireEvent.click(selectButton)
+
+    // Use getAllByRole to get the list of options and click the desired one
+    const options = screen.getAllByRole('option')
+    fireEvent.click(options[1]) // Click on 'Option 2'
+
+    expect(selectButton).toHaveTextContent('Option 2')
+  })
+
+  test('navigates options with keyboard', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} />)
+    const selectButton = screen.getByRole('combobox')
+    fireEvent.click(selectButton)
+
+    // Navigate down
+    fireEvent.keyDown(selectButton, { key: 'ArrowDown' })
+    expect(screen.getAllByRole('option')[1]).toHaveFocus()
+
+    fireEvent.keyDown(screen.getAllByRole('option')[2], { key: 'ArrowDown' })
+    expect(screen.getAllByRole('option')[2]).toHaveFocus()
+
+    // Navigate up
+    fireEvent.keyDown(screen.getAllByRole('option')[1], { key: 'ArrowUp' })
+    expect(screen.getAllByRole('option')[1]).toHaveFocus()
+  })
+
+  test('applies custom styles', () => {
+    const { container } = render(
       <Select
-        options={['Option 1', 'Option 2']}
-        value="Option 1"
-        onChange={jest.fn()}
-        className="bg-red-500 text-white"
+        options={['Option 1', 'Option 2', 'Option 3']}
+        classNames="bg-red-500 text-white hover:bg-red-700"
       />
     )
-    const selectElement = screen.getByRole('combobox')
-    expect(selectElement).toHaveClass('bg-red-500 text-white')
+
+    const selectButton = container.querySelector('div[role="combobox"]') as HTMLDivElement
+    expect(selectButton).toHaveClass('bg-red-500')
+    expect(selectButton).toHaveClass('text-white')
+
+    fireEvent.click(selectButton)
+    const dropdown = container.querySelector('div[role="listbox"]')
+    expect(dropdown).toHaveClass('bg-red-500')
+    expect(dropdown).toHaveClass('text-white')
+
+    const option = screen.getAllByRole('option')[0]
+    fireEvent.mouseOver(option)
+    expect(option).toHaveClass('bg-gray-200')
   })
 })
