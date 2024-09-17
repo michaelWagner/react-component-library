@@ -70,6 +70,19 @@ const data = [
   },
 ]
 
+const cityData = [
+  { name: 'John', age: 28, city: 'New York' },
+  { name: 'Jane', age: 32, city: 'Los Angeles' },
+  { name: 'Paul', age: 24, city: 'Chicago' },
+  { name: 'Mary', age: 29, city: 'San Francisco' }
+]
+
+const cityColumns = [
+  { header: 'Name', accessor: 'name' },
+  { header: 'Age', accessor: 'age' },
+  { header: 'City', accessor: 'city' }
+]
+
 const Template: StoryFn<typeof DataTable> = (args) => <DataTable {...args} />
 
 export const Basic = Template.bind({})
@@ -79,7 +92,7 @@ export const ShowsId = Template.bind({})
 ShowsId.args = { data, columns: [{ header: 'ID', accessor: 'id' }, ...columns] }
 
 export const CustomItemsPerPage = Template.bind({})
-CustomItemsPerPage.args = { data, columns, itemsPerPage: 3 }
+CustomItemsPerPage.args = { data: cityData, columns: cityColumns, itemsPerPage: 3 }
 
 export const CustomStyles = Template.bind({})
 CustomStyles.args = { data, columns, classNames: 'bg-red-500 text-white' }
