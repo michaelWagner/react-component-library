@@ -29,3 +29,21 @@ Large.args = {
   options: ['Option 1', 'Option 2'],
   classNames: 'px-4 py-4',
 }
+
+export const Disabled = Template.bind({})
+Disabled.args = {
+  options: ['Option 1', 'Option 2'],
+  disabled: true,
+}
+
+export const Placeholder = Template.bind({})
+Placeholder.args = {
+  options: ['Option 1', 'Option 2'],
+  placeholder: 'Select an option',
+}
+
+export const DefaultValue = Template.bind({})
+DefaultValue.args = {
+  options: ['Option 1', 'Option 2'],
+  initialValue: 'Option 1',
+}

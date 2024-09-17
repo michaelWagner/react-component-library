@@ -5,7 +5,6 @@ describe('Select Component', () => {
   test('renders with default props', () => {
     render(<Select options={['Option 1', 'Option 2', 'Option 3']} />)
     expect(screen.getByRole('combobox')).toBeInTheDocument()
-    expect(screen.getByText('Option 1')).toBeInTheDocument()
   })
 
   test('opens and closes dropdown on click', () => {
@@ -66,5 +65,29 @@ describe('Select Component', () => {
     const option = screen.getAllByRole('option')[0]
     fireEvent.mouseOver(option)
     expect(option).toHaveClass('bg-gray-200')
+  })
+
+  test('disables the select', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} disabled />)
+    const selectButton = screen.getByRole('combobox')
+    fireEvent.click(selectButton)
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument()
+  })
+
+  test('displays a placeholder', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} placeholder="Select an option" />)
+    expect(screen.getByText('Select an option')).toBeInTheDocument()
+  })
+
+  test('displays a default value', () => {
+    render(<Select options={['Option 1', 'Option 2', 'Option 3']} initialValue="Option 2" />)
+    expect(screen.getByRole('combobox')).toHaveTextContent('Option 2')
+  })
+
+  test('displays a default value with placeholder', () => {
+    render(
+      <Select options={['Option 1', 'Option 2', 'Option 3']} initialValue="Option 2" placeholder="Select an option" />
+    )
+    expect(screen.getByRole('combobox')).toHaveTextContent('Option 2')
   })
 })

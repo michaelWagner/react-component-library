@@ -4,11 +4,14 @@ import { GoChevronDown, GoChevronUp } from 'react-icons/go'
 interface CustomSelectProps {
   options: string[]
   classNames?: string
+  placeholder?: string
+  initialValue?: string
+  disabled?: boolean
 }
 
-export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => {
+export const Select: React.FC<CustomSelectProps> = ({ options, classNames, placeholder, initialValue, disabled }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [value, setValue] = useState(options[0])
+  const [value, setValue] = useState<string | undefined>(initialValue)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const optionRefs = useRef<(HTMLDivElement | null)[]>([])
   const selectRef = useRef<HTMLDivElement>(null)
@@ -63,25 +66,29 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => 
   return (
     <div ref={selectRef} className="relative">
       <div
-        className={`px-4 py-2 max-w-96 border border-gray-400 rounded cursor-pointer ${classNames || ''}`}
-        onClick={() => setIsOpen(!isOpen)}
+        className={
+          `px-4 py-2 max-w-96 border border-gray-400 rounded cursor-pointer ${
+          disabled && 'bg-gray-200 cursor-not-allowed'} ${
+          classNames || ''
+        }`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        aria-disabled={disabled}
         tabIndex={0}
         onKeyDown={handleKeyDown}
       >
         <div className='flex justify-between'>
-          <span>
-            {value}
-          </span>
+          {value && <span>{value}</span>}
+          {!value && <span className='text-gray-400'>{placeholder || 'Select an option...'}</span>}
           <span className='flex items-center'>
             {isOpen ? <GoChevronUp /> : <GoChevronDown />}
           </span>
         </div>
       </div>
 
-      {isOpen && (
+      {isOpen && !disabled && (
         <div
           className={`absolute w-full max-w-96 border border-gray-400 rounded bg-white ${classNames || ''}`}
           role="listbox"
@@ -94,9 +101,11 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => 
               role="option"
               className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${
                 classNames || ''} ${
-                focusedIndex === idx ? 'bg-gray-200' : ''
+                focusedIndex === idx ? 'bg-gray-200' : ''} ${
+                value === option ? 'bg-gray-300' : ''} ${
+                disabled && 'bg-gray-200 cursor-not-allowed'}
               }`}
-              onClick={() => handleSelect(option)}
+              onClick={() => !disabled && handleSelect(option)}
               onKeyDown={handleKeyDown}
               tabIndex={0}
               aria-selected={value === option}
