@@ -6,7 +6,7 @@ interface CustomSelectProps {
   classNames?: string
 }
 
-export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) =>{
+export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [value, setValue] = useState(options[0])
   const [focusedIndex, setFocusedIndex] = useState(0)
@@ -43,7 +43,7 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) =>{
   return (
     <div className="relative">
       <div
-        className={`px-4 py-2 border border-gray-400 rounded cursor-pointer ${classNames}`}
+        className={`px-4 py-2 max-w-96 border border-gray-400 rounded cursor-pointer ${classNames || ''}`}
         onClick={() => setIsOpen(!isOpen)}
         role="combobox"
         aria-haspopup="listbox"
@@ -63,7 +63,7 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) =>{
 
       {isOpen && (
         <div
-          className={`absolute w-full border border-gray-400 rounded bg-white ${classNames}`}
+          className={`absolute w-full max-w-96 border border-gray-400 rounded bg-white ${classNames || ''}`}
           role="listbox"
           tabIndex={-1}
         >
@@ -72,7 +72,8 @@ export const Select: React.FC<CustomSelectProps> = ({ options, classNames }) =>{
               key={idx}
               ref={(el) => (optionRefs.current[idx] = el)}
               role="option"
-              className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${classNames} ${
+              className={`px-4 py-2 hover:bg-gray-200 cursor-pointer ${
+                classNames || ''} ${
                 focusedIndex === idx ? 'bg-gray-200' : ''
               }`}
               onClick={() => handleSelect(option)}
