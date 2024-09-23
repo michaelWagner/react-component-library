@@ -7,8 +7,10 @@ const data = [
   { id: 3, name: 'John Smith', email: 'john.smith@gmail.com', age: 30 }
 ]
 const columns = [
-  { header: 'Name', accessor: 'name' },
-  { header: 'Email', accessor: 'email' },
+  { header: 'Id', accessor: 'id' as const },
+  { header: 'Name', accessor: 'name' as const },
+  { header: 'Email', accessor: 'email' as const },
+  { header: 'Age', accessor: 'age' as const },
 ]
 
 describe('DataTable Component', () => {

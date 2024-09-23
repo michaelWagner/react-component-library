@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react'
-import { DataTable } from './DataTable.tsx'
+import { DataTable, DataTableProps } from './DataTable'
 
 export default {
-  title: 'DataTable',
+  title: 'Components/DataTable',
   component: DataTable,
 } as Meta<typeof DataTable>
 
@@ -83,16 +83,30 @@ const cityColumns = [
   { header: 'City', accessor: 'city' }
 ]
 
-const Template: StoryFn<typeof DataTable> = (args) => <DataTable {...args} />
+const Template: StoryFn<DataTableProps<Record<string, unknown>>> = (args) => <DataTable {...args} />
 
 export const Basic = Template.bind({})
 Basic.args = { data, columns }
 
 export const ShowsId = Template.bind({})
-ShowsId.args = { data, columns: [{ header: 'ID', accessor: 'id' }, ...columns] }
+ShowsId.args = {
+  data,
+  columns: [
+    { header: 'ID', accessor: 'id' },
+    ...columns
+  ]
+}
 
 export const CustomItemsPerPage = Template.bind({})
-CustomItemsPerPage.args = { data: cityData, columns: cityColumns, itemsPerPage: 3 }
+CustomItemsPerPage.args = {
+  data: cityData,
+  columns: cityColumns,
+  itemsPerPage: 3
+}
 
 export const CustomStyles = Template.bind({})
-CustomStyles.args = { data, columns, classNames: 'bg-red-500 text-white' }
+CustomStyles.args = {
+  data,
+  columns,
+  classNames: 'bg-red-500 text-white'
+}
