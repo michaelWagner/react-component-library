@@ -36,9 +36,13 @@ export const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
+      <div
+        role='presentation'
+        className="modal-overlay fixed inset-0 bg-black opacity-50"></div>
 
-      <div className={`relative bg-white p-6 rounded-lg shadow-lg z-10 ${classNames}`}>
+      <div
+        role='dialog'
+        className={`relative bg-white p-6 rounded-lg shadow-lg z-10 ${classNames}`}>
         <div>
           {title && <h2 className="text-lg font-bold mb-4">{title}</h2>}
           <button
