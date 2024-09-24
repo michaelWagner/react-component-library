@@ -196,6 +196,19 @@ test('renders the button and handles click event', () => {
 })
 ```
 
+### Todos
+[ ] - Modal
+[ ] - Radio
+[ ] - Forms
+[ ] - Validations
+[ ] - Toast notifications
+[ ] - Accordion
+[ ] - Tabs
+[ ] - Carousel slider
+[ ] - Breadcrumbs
+[ ] - File upload
+[ ] - Skeleton loader
+
 ## Contributing
 
 Contributions are welcome! Please follow these steps:
